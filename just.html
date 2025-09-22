@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Access Demo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        video {
+            border: 2px solid #ccc;
+            margin-top: 20px;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>WebRTC Media Access Demo</h1>
+    <p>Click the buttons below to request access to your camera and microphone.</p>
+
+    <button id="cameraBtn">Access Camera</button>
+    <button id="micBtn">Access Microphone</button>
+
+    <video id="videoElement" autoplay playsinline></video>
+
+    <script>
+        document.getElementById('cameraBtn').addEventListener('click', () => {
+            requestMedia({ video: true });
+        });
+
+        document.getElementById('micBtn').addEventListener('click', () => {
+            requestMedia({ audio: true });
+        });
+
+        function requestMedia(constraints) {
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(stream => {
+                    const videoElement = document.getElementById('videoElement');
+                    videoElement.srcObject = stream;
+                    videoElement.play();
+
+                    console.log('Media stream received:', stream);
+                })
+                .catch(err => {
+                    console.error('Error accessing media devices:', err);
+                    alert('Error accessing media. Please check console for details and ensure you have given permission.');
+                });
+        }
+    </script>
+
+</body>
+</html>
